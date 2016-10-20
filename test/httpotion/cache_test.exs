@@ -4,7 +4,8 @@ defmodule HTTPotion.CacheTest do
 
   test "request creates key" do
     defmodule TestClient do
-      use HTTPotion.{Base, Cache}
+      use HTTPotion.Base
+      use HTTPotion.Cache
     end
 
     Cachex.start_link(:http_cache, [default_ttl: :timer.seconds(10)])

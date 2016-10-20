@@ -5,7 +5,7 @@ defmodule HTTPotion.Cache.Mixfile do
     [ app: :httpotion_cache,
       name: "HTTPotion.Cache",
       source_url: "https://github.com/dmitryzuev/httpotion_cache",
-      version: "0.1.0",
+      version: "0.1.1",
       elixir: "~> 1.1",
       docs: [ extras: ["README.md"] ],
       description: description(),

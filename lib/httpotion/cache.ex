@@ -1,10 +1,13 @@
 defmodule HTTPotion.Cache do
   @moduledoc """
-  HTTPotion Cache implementation
+  The cache module of HTTPotion.
+
+  When used, it overrides HTTPotion.request method, which allows you to use `cache: true`
+  attribute and cache responses for specified amount of time (see the README).
   """
 
   defmacro __using__(_) do
-    quote do
+    quote location: :keep do
       @doc """
       Override HTTPotion.request method
       """
@@ -16,7 +19,6 @@ defmodule HTTPotion.Cache do
       end
 
       defp request_from_cache(method, url, options \\ []) do
-        # Cachex.start_link(:http_cache, [])
         case Cachex.get(:http_cache, cache_key(method, url)) do
           {:ok, response} -> response
           {:missing, _} -> cache_request(method, url, options)
@@ -25,7 +27,6 @@ defmodule HTTPotion.Cache do
       end
 
       defp cache_request(method, url, options \\ []) do
-        # Cachex.start_link(:http_cache, [])
         response = request(method, url, Keyword.delete(options, :cache))
         Cachex.set(:http_cache, cache_key(method, url), response)
         response
@@ -34,6 +35,7 @@ defmodule HTTPotion.Cache do
       defp cache_key(method, url) do
         Enum.join([method, process_url(url)], " ")
       end
+      defoverridable [cache_key: 2]
     end
   end
 end
